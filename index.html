@@ -1,440 +1,294 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>CORTEXA — Digital Experiences</title>
+    <title>Cortexa — Minecraft Mod Maker</title>
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            background: #050507;
-            color: #ffffff;
-            font-family: Arial, Helvetica, sans-serif;
-            overflow-x: hidden;
-        }
-
-        /* =========================
-           BACKGROUND
-        ========================= */
-
-        body::before {
-            content: "";
-            position: fixed;
-
-            width: 700px;
-            height: 700px;
-
-            top: -300px;
-            left: -250px;
-
-            background: #6546ff;
-            filter: blur(180px);
-            opacity: 0.15;
-
-            pointer-events: none;
-            z-index: -2;
-        }
-
-        body::after {
-            content: "";
-
-            position: fixed;
-
-            width: 600px;
-            height: 600px;
-
-            right: -250px;
-            bottom: -250px;
-
-            background: #00c8ff;
-            filter: blur(180px);
-            opacity: 0.08;
-
-            pointer-events: none;
-            z-index: -2;
-        }
-
-        /* =========================
-           NAVBAR
-        ========================= */
-
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-
-            width: 100%;
-
-            z-index: 1000;
-
-            background: rgba(5, 5, 7, 0.55);
-            backdrop-filter: blur(20px);
-
-            border-bottom: 1px solid rgba(255,255,255,0.08);
-        }
-
-        nav {
-            width: 90%;
-            max-width: 1400px;
-
-            height: 80px;
-
-            margin: auto;
-
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .logo {
-            color: white;
-
-            font-size: 24px;
-            font-weight: 900;
-
-            letter-spacing: 4px;
-
-            text-decoration: none;
-        }
-
-        .logo span {
-            color: #786cff;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 35px;
-
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: #999;
-
-            text-decoration: none;
-
-            font-size: 13px;
-
-            transition: 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: white;
-        }
-
-        .nav-button {
-            padding: 11px 20px;
-
-            border: 1px solid rgba(120,108,255,0.7);
-
-            border-radius: 30px;
-
-            color: white;
-
-            text-decoration: none;
-
-            font-size: 13px;
-
-            box-shadow: 0 0 25px rgba(120,108,255,0.15);
-
-            transition: 0.3s;
-        }
-
-        .nav-button:hover {
-            background: rgba(120,108,255,0.15);
-
-            box-shadow: 0 0 35px rgba(120,108,255,0.3);
-        }
-
-        /* =========================
-           HERO
-        ========================= */
-
-        .hero {
-            min-height: 100vh;
-
-            width: 100%;
-
-            display: flex;
-            align-items: center;
-
-            position: relative;
-
-            padding: 120px 5% 80px;
-        }
-
-        .hero-content {
-            max-width: 800px;
-
-            position: relative;
-            z-index: 5;
-        }
-
-        .badge {
-            display: inline-block;
-
-            padding: 9px 16px;
-
-            border: 1px solid rgba(120,108,255,0.4);
-
-            border-radius: 30px;
-
-            background: rgba(120,108,255,0.06);
-
-            color: #aaa;
-
-            font-size: 11px;
-
-            letter-spacing: 1px;
-
-            margin-bottom: 30px;
-        }
-
-        .badge span {
-            color: #7c6cff;
-        }
-
-        .hero h1 {
-            font-size: clamp(60px, 9vw, 130px);
-
-            line-height: 0.88;
-
-            letter-spacing: -7px;
-
-            font-weight: 900;
-        }
-
-        .hero h1 span {
-            color: #7568ff;
-
-            text-shadow:
-                0 0 30px rgba(117,104,255,0.45),
-                0 0 80px rgba(117,104,255,0.15);
-        }
-
-        .hero p {
-            max-width: 600px;
-
-            margin-top: 35px;
-
-            color: #888;
-
-            font-size: 17px;
-
-            line-height: 1.7;
-        }
-
-        .hero-buttons {
-            display: flex;
-
-            gap: 15px;
-
-            margin-top: 35px;
-
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 15px 28px;
-
-            border-radius: 30px;
-
-            text-decoration: none;
-
-            font-size: 13px;
-
-            font-weight: bold;
-
-            transition: 0.3s;
-        }
-
-        .btn-primary {
-            background: #7467ff;
-
-            color: white;
-
-            box-shadow:
-                0 0 30px rgba(116,103,255,0.35);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-4px);
-
-            box-shadow:
-                0 0 45px rgba(116,103,255,0.55);
-        }
-
-        .btn-secondary {
-            color: #aaa;
-
-            border: 1px solid #29292f;
-        }
-
-        .btn-secondary:hover {
-            color: white;
-
-            border-color: #555;
-        }
-
-        /* =========================
-           HERO GLOW
-        ========================= */
-
-        .hero-glow {
-            position: absolute;
-
-            width: 500px;
-            height: 500px;
-
-            right: 5%;
-            top: 50%;
-
-            transform: translateY(-50%);
-
-            border-radius: 50%;
-
-            background:
-                radial-gradient(
-                    circle,
-                    rgba(100,80,255,0.35),
-                    transparent 65%
-                );
-
-            filter: blur(20px);
-
-            pointer-events: none;
-        }
-
-        /* =========================
-           RESPONSIVE
-        ========================= */
-
-        @media(max-width: 900px) {
-
-            .nav-links {
-                display: none;
-            }
-
-            .hero {
-                padding-top: 140px;
-            }
-
-            .hero h1 {
-                font-size: clamp(55px, 15vw, 90px);
-
-                letter-spacing: -5px;
-            }
-
-            .hero-glow {
-                width: 350px;
-                height: 350px;
-
-                right: -150px;
-
-                opacity: 0.5;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <!-- NAVBAR -->
+<header>
 
-    <header>
-        <nav>
+    <a href="#" class="logo">
+        CORTEX<span>A</span>
+    </a>
 
-            <a href="#" class="logo">
-                CORTEX<span>A</span>
-            </a>
+    <div class="status">
+        <span></span>
+        MOD MAKER ONLINE
+    </div>
 
-            <ul class="nav-links">
-
-                <li>
-                    <a href="#explore">Explore</a>
-                </li>
-
-                <li>
-                    <a href="#categories">Categories</a>
-                </li>
-
-                <li>
-                    <a href="#pricing">Pricing</a>
-                </li>
-
-                <li>
-                    <a href="#about">About</a>
-                </li>
-
-            </ul>
-
-            <a href="#explore" class="nav-button">
-                EXPLORE →
-            </a>
-
-        </nav>
-    </header>
+</header>
 
 
-    <!-- HERO -->
+<main>
 
-    <main>
+    <section class="hero">
 
-        <section class="hero">
+        <div class="badge">
+            CORTEXA MOD MAKER
+        </div>
 
-            <div class="hero-content">
+        <h1>
+            BUILD YOUR<br>
+            <span>MINECRAFT MOD.</span>
+        </h1>
 
-                <div class="badge">
-                    <span>●</span>
-                    DIGITAL EXPERIENCES FOR THE NEXT ERA
-                </div>
+        <p>
+            Choose your Minecraft version and mod loader,
+            then describe exactly what you want Cortexa to create.
+        </p>
 
-                <h1>
-                    BUILD<br>
-                    WHAT'S<br>
-                    <span>NEXT.</span>
-                </h1>
 
-                <p>
-                    Premium websites engineered for brands,
-                    creators and businesses that refuse to look ordinary.
-                </p>
+        <!-- SETTINGS -->
 
-                <div class="hero-buttons">
+        <div class="settings">
 
-                    <a href="#explore" class="btn btn-primary">
-                        EXPLORE WEBSITES →
-                    </a>
+            <div class="setting">
 
-                    <a href="#about" class="btn btn-secondary">
-                        DISCOVER CORTEXA
-                    </a>
+                <label>MOD LOADER</label>
+
+                <div class="options">
+
+                    <button class="loader active"
+                        data-loader="Forge">
+                        Forge
+                    </button>
+
+                    <button class="loader"
+                        data-loader="Fabric">
+                        Fabric
+                    </button>
+
+                    <button class="loader"
+                        data-loader="NeoForge">
+                        NeoForge
+                    </button>
+
+                    <button class="loader"
+                        data-loader="Quilt">
+                        Quilt
+                    </button>
 
                 </div>
 
             </div>
 
 
-            <!-- Future 3D Scene -->
+            <div class="setting">
 
-            <div class="hero-glow"></div>
+                <label>MINECRAFT VERSION</label>
 
-        </section>
+                <select id="version">
 
-    </main>
+                    <option value="1.21.8">
+                        1.21.8
+                    </option>
+
+                    <option value="1.21.7">
+                        1.21.7
+                    </option>
+
+                    <option value="1.21.6">
+                        1.21.6
+                    </option>
+
+                    <option value="1.21.5">
+                        1.21.5
+                    </option>
+
+                    <option value="1.21.4">
+                        1.21.4
+                    </option>
+
+                    <option value="1.20.6">
+                        1.20.6
+                    </option>
+
+                    <option value="1.20.4">
+                        1.20.4
+                    </option>
+
+                    <option value="snapshot">
+                        Snapshot
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <!-- CHAT -->
+
+        <div class="chat">
+
+            <div class="chat-header">
+
+                <div>
+
+                    <strong>
+                        Cortexa AI
+                    </strong>
+
+                    <small>
+                        Ready to build
+                    </small>
+
+                </div>
+
+                <div class="online"></div>
+
+            </div>
+
+
+            <div id="messages" class="messages">
+
+                <div class="message bot">
+
+                    👋 Tell me what you want
+                    your Minecraft mod to do.
+
+                    <br><br>
+
+                    Example:
+
+                    <b>
+                        "Make me a horror mod with
+                        a monster that appears at night."
+                    </b>
+
+                </div>
+
+            </div>
+
+
+            <!-- QUICK PROMPTS -->
+
+            <div class="quick">
+
+                <button
+                    onclick="setPrompt('Make me a horror mod with a scary night creature')">
+
+                    👻 Horror
+
+                </button>
+
+                <button
+                    onclick="setPrompt('Make me a magic mod with spells and magical weapons')">
+
+                    ✨ Magic
+
+                </button>
+
+                <button
+                    onclick="setPrompt('Make me a new boss with special attacks')">
+
+                    👹 Boss
+
+                </button>
+
+                <button
+                    onclick="setPrompt('Make me a technology mod with machines and power')">
+
+                    ⚙️ Technology
+
+                </button>
+
+            </div>
+
+
+            <!-- INPUT -->
+
+            <div class="input-area">
+
+                <textarea
+                    id="prompt"
+                    placeholder="Describe your Minecraft mod..."
+                    rows="1"></textarea>
+
+                <button
+                    id="generate">
+
+                    ➤
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- BUILD PANEL -->
+
+        <div
+            id="buildPanel"
+            class="build-panel hidden">
+
+            <div class="build-header">
+
+                <strong>
+                    CORTEXA BUILD SYSTEM
+                </strong>
+
+                <span id="buildStatus">
+                    STARTING...
+                </span>
+
+            </div>
+
+
+            <div class="progress">
+
+                <div id="progressBar"></div>
+
+            </div>
+
+
+            <div id="buildSteps">
+
+                <div>○ Reading your idea</div>
+
+                <div>○ Creating mod structure</div>
+
+                <div>○ Generating content</div>
+
+                <div>○ Creating recipes</div>
+
+                <div>○ Preparing project</div>
+
+            </div>
+
+
+            <button
+                id="download"
+                class="download"
+                disabled>
+
+                DOWNLOAD MOD PROJECT
+
+            </button>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer>
+
+    CORTEXA MOD MAKER • CREATE YOUR WORLD
+
+</footer>
+
+
+<script src="script.js"></script>
 
 </body>
 </html>
-```
