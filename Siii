@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Cortexa — Minecraft Mod Maker</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+
+    <a href="#" class="logo">
+        CORTEX<span>A</span>
+    </a>
+
+    <div class="status">
+        <span></span>
+        MOD MAKER ONLINE
+    </div>
+
+</header>
+
+
+<main>
+
+    <section class="hero">
+
+        <div class="badge">
+            CORTEXA MOD MAKER
+        </div>
+
+        <h1>
+            BUILD YOUR<br>
+            <span>MINECRAFT MOD.</span>
+        </h1>
+
+        <p>
+            Choose your Minecraft version and mod loader,
+            then describe exactly what you want Cortexa to create.
+        </p>
+
+
+        <!-- SETTINGS -->
+
+        <div class="settings">
+
+            <div class="setting">
+
+                <label>MOD LOADER</label>
+
+                <div class="options">
+
+                    <button class="loader active"
+                        data-loader="Forge">
+                        Forge
+                    </button>
+
+                    <button class="loader"
+                        data-loader="Fabric">
+                        Fabric
+                    </button>
+
+                    <button class="loader"
+                        data-loader="NeoForge">
+                        NeoForge
+                    </button>
+
+                    <button class="loader"
+                        data-loader="Quilt">
+                        Quilt
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="setting">
+
+                <label>MINECRAFT VERSION</label>
+
+                <select id="version">
+
+                    <option value="1.21.8">
+                        1.21.8
+                    </option>
+
+                    <option value="1.21.7">
+                        1.21.7
+                    </option>
+
+                    <option value="1.21.6">
+                        1.21.6
+                    </option>
+
+                    <option value="1.21.5">
+                        1.21.5
+                    </option>
+
+                    <option value="1.21.4">
+                        1.21.4
+                    </option>
+
+                    <option value="1.20.6">
+                        1.20.6
+                    </option>
+
+                    <option value="1.20.4">
+                        1.20.4
+                    </option>
+
+                    <option value="snapshot">
+                        Snapshot
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <!-- CHAT -->
+
+        <div class="chat">
+
+            <div class="chat-header">
+
+                <div>
+
+                    <strong>
+                        Cortexa AI
+                    </strong>
+
+                    <small>
+                        Ready to build
+                    </small>
+
+                </div>
+
+                <div class="online"></div>
+
+            </div>
+
+
+            <div id="messages" class="messages">
+
+                <div class="message bot">
+
+                    👋 Tell me what you want
+                    your Minecraft mod to do.
+
+                    <br><br>
+
+                    Example:
+
+                    <b>
+                        "Make me a horror mod with
+                        a monster that appears at night."
+                    </b>
+
+                </div>
+
+            </div>
+
+
+            <!-- QUICK PROMPTS -->
+
+            <div class="quick">
+
+                <button
+                    onclick="setPrompt('Make me a horror mod with a scary night creature')">
+
+                    👻 Horror
+
+                </button>
+
+                <button
+                    onclick="setPrompt('Make me a magic mod with spells and magical weapons')">
+
+                    ✨ Magic
+
+                </button>
+
+                <button
+                    onclick="setPrompt('Make me a new boss with special attacks')">
+
+                    👹 Boss
+
+                </button>
+
+                <button
+                    onclick="setPrompt('Make me a technology mod with machines and power')">
+
+                    ⚙️ Technology
+
+                </button>
+
+            </div>
+
+
+            <!-- INPUT -->
+
+            <div class="input-area">
+
+                <textarea
+                    id="prompt"
+                    placeholder="Describe your Minecraft mod..."
+                    rows="1"></textarea>
+
+                <button
+                    id="generate">
+
+                    ➤
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- BUILD PANEL -->
+
+        <div
+            id="buildPanel"
+            class="build-panel hidden">
+
+            <div class="build-header">
+
+                <strong>
+                    CORTEXA BUILD SYSTEM
+                </strong>
+
+                <span id="buildStatus">
+                    STARTING...
+                </span>
+
+            </div>
+
+
+            <div class="progress">
+
+                <div id="progressBar"></div>
+
+            </div>
+
+
+            <div id="buildSteps">
+
+                <div>○ Reading your idea</div>
+
+                <div>○ Creating mod structure</div>
+
+                <div>○ Generating content</div>
+
+                <div>○ Creating recipes</div>
+
+                <div>○ Preparing project</div>
+
+            </div>
+
+
+            <button
+                id="download"
+                class="download"
+                disabled>
+
+                DOWNLOAD MOD PROJECT
+
+            </button>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer>
+
+    CORTEXA MOD MAKER • CREATE YOUR WORLD
+
+</footer>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
