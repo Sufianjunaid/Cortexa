@@ -1,158 +1,480 @@
-// =========================
-// CORTEXA JAVASCRIPT
-// =========================
+const promptBox =
+    document.getElementById("prompt");
+
+const generateButton =
+    document.getElementById("generate");
+
+const messages =
+    document.getElementById("messages");
+
+const version =
+    document.getElementById("version");
+
+const buildPanel =
+    document.getElementById("buildPanel");
+
+const progressBar =
+    document.getElementById("progressBar");
+
+const buildStatus =
+    document.getElementById("buildStatus");
+
+const downloadButton =
+    document.getElementById("download");
+
+let selectedLoader = "Forge";
+
+let generatedProject = "";
 
 
-// Page loaded
-document.addEventListener("DOMContentLoaded", function () {
+// ===============================
+// LOADER SELECTION
+// ===============================
 
-    console.log("CORTEXA website loaded.");
+const loaders =
+    document.querySelectorAll(".loader");
 
+loaders.forEach(loader => {
 
-    // =========================
-    // HERO ANIMATION
-    // =========================
+    loader.addEventListener("click", () => {
 
-    const heroContent = document.querySelector(".hero-content");
-
-    heroContent.style.opacity = "0";
-    heroContent.style.transform = "translateY(30px)";
-
-    setTimeout(function () {
-
-        heroContent.style.transition =
-            "all 1s cubic-bezier(.2,.8,.2,1)";
-
-        heroContent.style.opacity = "1";
-        heroContent.style.transform = "translateY(0)";
-
-    }, 200);
-
-
-    // =========================
-    // BUTTON CLICK EFFECT
-    // =========================
-
-    const buttons = document.querySelectorAll(".btn");
-
-    buttons.forEach(function (button) {
-
-        button.addEventListener("click", function () {
-
-            button.style.transform = "scale(0.96)";
-
-            setTimeout(function () {
-                button.style.transform = "";
-            }, 120);
-
+        loaders.forEach(item => {
+            item.classList.remove("active");
         });
 
-    });
+        loader.classList.add("active");
 
-
-    // =========================
-    // NAVBAR SCROLL EFFECT
-    // =========================
-
-    const header = document.querySelector("header");
-
-    window.addEventListener("scroll", function () {
-
-        if (window.scrollY > 50) {
-
-            header.style.background =
-                "rgba(5,5,7,0.85)";
-
-            header.style.boxShadow =
-                "0 10px 40px rgba(0,0,0,0.25)";
-
-        } else {
-
-            header.style.background =
-                "rgba(5,5,7,0.55)";
-
-            header.style.boxShadow = "none";
-        }
-
-    });
-
-
-    // =========================
-    // MOUSE GLOW
-    // =========================
-
-    const glow = document.querySelector(".hero-glow");
-
-    document.addEventListener("mousemove", function (event) {
-
-        if (!glow) return;
-
-        const x =
-            (event.clientX / window.innerWidth - 0.5) * 40;
-
-        const y =
-            (event.clientY / window.innerHeight - 0.5) * 40;
-
-        glow.style.marginLeft = x + "px";
-        glow.style.marginTop = y + "px";
-
-    });
-
-
-    // =========================
-    // BUTTON RIPPLE
-    // =========================
-
-    buttons.forEach(function (button) {
-
-        button.addEventListener("click", function (event) {
-
-            const ripple = document.createElement("span");
-
-            ripple.style.position = "absolute";
-            ripple.style.width = "10px";
-            ripple.style.height = "10px";
-            ripple.style.borderRadius = "50%";
-            ripple.style.background = "rgba(255,255,255,0.4)";
-            ripple.style.transform = "scale(0)";
-            ripple.style.pointerEvents = "none";
-
-            const rect = button.getBoundingClientRect();
-
-            ripple.style.left =
-                (event.clientX - rect.left) + "px";
-
-            ripple.style.top =
-                (event.clientY - rect.top) + "px";
-
-            button.style.position = "relative";
-            button.style.overflow = "hidden";
-
-            button.appendChild(ripple);
-
-            ripple.animate(
-                [
-                    {
-                        transform: "scale(0)",
-                        opacity: 0.8
-                    },
-                    {
-                        transform: "scale(20)",
-                        opacity: 0
-                    }
-                ],
-                {
-                    duration: 600,
-                    easing: "ease-out"
-                }
-            );
-
-            setTimeout(function () {
-                ripple.remove();
-            }, 600);
-
-        });
+        selectedLoader =
+            loader.dataset.loader;
 
     });
 
 });
+
+
+// ===============================
+// QUICK PROMPTS
+// ===============================
+
+function setPrompt(text) {
+
+    promptBox.value = text;
+
+    promptBox.focus();
+
+}
+
+
+// ===============================
+// ADD MESSAGE
+// ===============================
+
+function addMessage(text, type) {
+
+    const message =
+        document.createElement("div");
+
+    message.className =
+        "message " + type;
+
+    message.textContent =
+        text;
+
+    messages.appendChild(message);
+
+    messages.scrollTop =
+        messages.scrollHeight;
+}
+
+
+// ===============================
+// GENERATE
+// ===============================
+
+generateButton.addEventListener(
+    "click",
+    generateMod
+);
+
+
+promptBox.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key === "Enter" &&
+            !event.shiftKey
+        ) {
+
+            event.preventDefault();
+
+            generateMod();
+
+        }
+
+    }
+);
+
+
+function generateMod() {
+
+    const request =
+        promptBox.value.trim();
+
+    if (!request) {
+
+        promptBox.focus();
+
+        return;
+
+    }
+
+
+    const selectedVersion =
+        version.value;
+
+
+    // User message
+
+    addMessage(
+        request,
+        "user"
+    );
+
+
+    promptBox.value = "";
+
+
+    // AI response
+
+    setTimeout(() => {
+
+        addMessage(
+            `Got it! I'll design this for ${selectedLoader} on Minecraft ${selectedVersion}.`,
+            "bot"
+        );
+
+    }, 300);
+
+
+    // Open build panel
+
+    setTimeout(() => {
+
+        startBuild(
+            request,
+            selectedLoader,
+            selectedVersion
+        );
+
+    }, 700);
+
+}
+
+
+// ===============================
+// BUILD SIMULATION
+// ===============================
+
+function startBuild(
+    request,
+    loader,
+    minecraftVersion
+) {
+
+    buildPanel.classList.remove(
+        "hidden"
+    );
+
+
+    progressBar.style.width =
+        "0%";
+
+
+    downloadButton.disabled =
+        true;
+
+
+    const steps = [
+        "Reading your idea",
+        "Selecting mod architecture",
+        "Creating mod structure",
+        "Generating content",
+        "Creating recipes",
+        "Preparing project"
+    ];
+
+
+    let current = 0;
+
+
+    const interval =
+        setInterval(() => {
+
+            current++;
+
+            const percentage =
+                Math.min(
+                    (current / steps.length) * 100,
+                    100
+                );
+
+
+            progressBar.style.width =
+                percentage + "%";
+
+
+            if (current <= steps.length) {
+
+                buildStatus.textContent =
+                    steps[current - 1]
+                        .toUpperCase() + "...";
+
+            }
+
+
+            if (
+                current >=
+                steps.length
+            ) {
+
+                clearInterval(interval);
+
+                buildStatus.textContent =
+                    "PROJECT READY";
+
+                generatedProject =
+                    createProjectInfo(
+                        request,
+                        loader,
+                        minecraftVersion
+                    );
+
+
+                downloadButton.disabled =
+                    false;
+
+            }
+
+        }, 550);
+
+}
+
+
+// ===============================
+// PROJECT INFO
+// ===============================
+
+function createProjectInfo(
+    request,
+    loader,
+    minecraftVersion
+) {
+
+    return `CORTEXA MOD PROJECT
+
+MOD LOADER
+${loader}
+
+MINECRAFT VERSION
+${minecraftVersion}
+
+USER REQUEST
+${request}
+
+PROJECT STRUCTURE
+
+src/
+ └── main/
+     ├── java/
+     └── resources/
+
+MOD INFORMATION
+
+Loader: ${loader}
+Minecraft: ${minecraftVersion}
+
+FEATURES REQUESTED
+
+${detectFeatures(request)}
+
+NOTE
+
+This front-end creates the project specification.
+A secure backend/build service is required to
+generate and compile the actual Minecraft source
+code and JAR file.
+`;
+
+}
+
+
+// ===============================
+// FEATURE DETECTION
+// ===============================
+
+function detectFeatures(text) {
+
+    const lower =
+        text.toLowerCase();
+
+    const features = [];
+
+
+    if (
+        lower.includes("horror") ||
+        lower.includes("scary") ||
+        lower.includes("creepy")
+    ) {
+
+        features.push(
+            "• Horror atmosphere"
+        );
+
+    }
+
+
+    if (
+        lower.includes("mob") ||
+        lower.includes("monster") ||
+        lower.includes("creature") ||
+        lower.includes("boss")
+    ) {
+
+        features.push(
+            "• Custom entities"
+        );
+
+    }
+
+
+    if (
+        lower.includes("sword") ||
+        lower.includes("weapon") ||
+        lower.includes("armor")
+    ) {
+
+        features.push(
+            "• Custom combat items"
+        );
+
+    }
+
+
+    if (
+        lower.includes("dimension") ||
+        lower.includes("world")
+    ) {
+
+        features.push(
+            "• Custom dimension/world"
+        );
+
+    }
+
+
+    if (
+        lower.includes("magic") ||
+        lower.includes("spell")
+    ) {
+
+        features.push(
+            "• Magic abilities"
+        );
+
+    }
+
+
+    if (
+        lower.includes("machine") ||
+        lower.includes("technology")
+    ) {
+
+        features.push(
+            "• Technology systems"
+        );
+
+    }
+
+
+    if (
+        lower.includes("block") ||
+        lower.includes("ore")
+    ) {
+
+        features.push(
+            "• Custom blocks"
+        );
+
+    }
+
+
+    if (
+        lower.includes("recipe") ||
+        lower.includes("craft")
+    ) {
+
+        features.push(
+            "• Custom crafting"
+        );
+
+    }
+
+
+    if (features.length === 0) {
+
+        features.push(
+            "• Custom gameplay mechanics"
+        );
+
+    }
+
+
+    return features.join("\n");
+
+}
+
+
+// ===============================
+// DOWNLOAD PROJECT SPEC
+// ===============================
+
+downloadButton.addEventListener(
+    "click",
+    () => {
+
+        if (!generatedProject)
+            return;
+
+
+        const file =
+            new Blob(
+                [generatedProject],
+                {
+                    type:
+                        "text/plain"
+                }
+            );
+
+
+        const url =
+            URL.createObjectURL(file);
+
+
+        const link =
+            document.createElement("a");
+
+
+        link.href = url;
+
+        link.download =
+            "cortexa-mod-project.txt";
+
+
+        link.click();
+
+
+        URL.revokeObjectURL(url);
+
+    }
+);
